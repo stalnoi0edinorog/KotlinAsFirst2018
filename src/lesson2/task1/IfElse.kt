@@ -88,7 +88,9 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s= (s1+s2+s3)/2
      if (s<=s1) return (s/v1)
      if (s>s1 && s<=s1+s2 && v1>0) return (t1+(s-s1)/v2)
-     if (v1<1 || v2<1 || v3<1) return (t1+ t2 + t3/v3)
+     if (v1<1) return (t1+ t2 + t3/v3)
+     if (v2<1) return (t1+ t2 + t3/v3)
+     if (v3<1) return (s/v1)
     else return ((s-s1-s2)/v3)
 
 }
@@ -128,7 +130,14 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val cos = (( a*a+b*b-c*c )/2*a*b)
+    if (a>b+c || b>a+c || c>a+b) return (-1)
+    if (cos<0) return 2
+    if (0<cos && cos<1) return 0
+        else return 1
+
+}
 
 /**
  * Средняя
@@ -138,4 +147,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    if (a<=c && d<=b) return (d-c)
+    if (c<a && a<d && d<b) return (d-a)
+    if (a<c && c<b && b<d) return (b-c)
+    if (c<a && a==d||c==b && b<d) return 0
+    if (c<a && b<d) return (b-a)
+    else return -1
+}
