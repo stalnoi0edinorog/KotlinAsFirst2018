@@ -82,7 +82,7 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val e = a * b
     val f = b * c
     val j = a * c
-    if (e <= d)  {
+    if (e <= d) {
                 if (((a <= r) or (a<= s)) && ((b <= r) or (b <= s))) return true
             }
     if (f <= d)  {
