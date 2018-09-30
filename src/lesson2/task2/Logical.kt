@@ -83,13 +83,13 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val f = b * c
     val j = a * c
     if (e <= d) {
-                if (((a <= r) or (a<= s)) && ((b <= r) or (b <= s))) return true
+        if (((a <= r) or (b<= r)) && ((a <= s) or (b <= s))) return true
             }
     if (f <= d)  {
-        if (((b<=r) or (b<=s)) && ((c<=r) or (c<=s))) return true
+        if (((b<=r) or (c<=r)) && ((b<=s) or (c<=s))) return true
     }
     if (j<= d)    {
-        if (((a<=r) or (a<=s)) && ((c<=r) or (c<=s))) return true
+        if (((a<=r) or (c<=r)) && ((a<=s) or (c<=s))) return true
     }
     return false
     }
