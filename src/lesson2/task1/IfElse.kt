@@ -68,8 +68,9 @@ fun ageDescription(age: Int): String {
         1 -> if (age % 100 != 11) return ("$age год"); else return ("$age лет")
         2, 3, 4 -> if (age % 100 != 12 && age % 100 != 13 && age % 100 != 14) return ("$age года"); else return ("$age лет")
         6, 7, 8, 9, 0 -> return ("$age лет")
+        else -> return ("нет такого возраста")
     }
-    return ("нет такого возраста")
+
 }
 
 /**
@@ -131,10 +132,13 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val cos = (( a*a+b*b-c*c )/2*a*b)
     if (a>b+c || b>a+c || c>a+b) return (-1)
-    if (cos<0) return 2
-    if (0<cos && cos<1) return 0
+    if ((a>=b && a>=c) && ((c*c+b*b)>a*a)) return 0
+    if ((b>=a && b>=c) && ((a*a+c*c)>b*b)) return 0
+    if ((c>=a && c>=b) && ((a*a+b*b)>c*c)) return 0
+    if ((a>=b && a>=c) && ((c*c+b*b)<a*a)) return 2
+    if ((b>=a && b>=c) && ((a*a+c*c)<b*b)) return 2
+    if ((c>=a && c>=b) && ((a*a+b*b)<c*c)) return 2
         else return 1
 
 }
@@ -149,6 +153,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     if (a<=c && d<=b) return (d-c)
+    if (a==c && d>=b) return (d-c)
+    if (a>c && d==b) return (b-a)
     if (c<a && a<d && d<b) return (d-a)
     if (a<c && c<b && b<d) return (b-c)
     if (c<a && a==d||c==b && b<d) return 0
