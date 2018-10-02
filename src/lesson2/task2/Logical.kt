@@ -78,19 +78,9 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val d = r * s
-    val e = a * b
-    val f = b * c
-    val j = a * c
-    if (e <= d) {
-        if (((a <= r) or (b<= r)) && ((a <= s) or (b <= s))) return true
-            }
-    if (f <= d)  {
-        if (((b<=r) or (c<=r)) && ((b<=s) or (c<=s))) return true
-    }
-    if (j<= d)  {
-        if (((a<=r) or (c<=r)) && ((a<=s) or (c<=s))) return true
-    }
-    return false
+   if ((a<=r)&& (b<=s) or (b<=r)&&(a<=s)) return true
+   if ((c<=r)&& (b<=s) or (b<=r)&&(c<=s)) return true
+   if ((a<=r)&& (c<=s) or (c<=r)&&(a<=s)) return true
+   else return false
     }
 
