@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task2
 
 import lesson1.task1.sqr
@@ -20,8 +21,7 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
 fun isNumberHappy(number: Int): Boolean {
     val a = (number % 100) / 10 + (number % 100) % 10
     val b = (number / 100) / 10 + (number / 100) % 10
-    if (a == b) return true
-    else return false
+    return (a == b)
 }
 
 /**
@@ -40,18 +40,14 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    if (((year%4==0) && (year%100!=0)) or (year%400==0)) {
-            if (month == 2) return 29
-            if ((month in 1..7 step 2) or (month in 8..12 step 2)) return 31
-            else return 30
+fun daysInMonth(month: Int, year: Int): Int =
+        when {
+            (month == 2) && ((year % 400 == 0) || (year % 100 != 0) && (year % 4 == 0)) -> 29
+            (month == 2) -> 28
+            (month in 1..7 step 2) || (month in 8..12 step 2) -> 31
+            else -> 30
         }
-    else {
-        if (month == 2) return 28
-        if ((month in 1..7 step 2) or (month in 8..12 step 2)) return 31
-        else return 30
-    }
-}
+
 
 /**
  * Средняя
@@ -63,8 +59,7 @@ fun daysInMonth(month: Int, year: Int): Int {
 fun circleInside(x1: Double, y1: Double, r1: Double,
                  x2: Double, y2: Double, r2: Double): Boolean {
     val a = sqr(x2 - x1) + sqr(y2 - y1)
-    if (a<= sqr(r2-r1)&&(r1<r2) or ((a <= sqr(r2-r1)) && (r1==r2))) return true
-    else return false
+    return (a <= sqr(r2 - r1) && (r1 < r2) || ((a <= sqr(r2 - r1)) && (r1 == r2)))
 }
 
 
@@ -78,9 +73,9 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-   if (((a<=r)&& (b<=s)) || ((b<=r)&&(a<=s))) return true
-   if (((c<=r)&& (b<=s)) || ((b<=r)&&(c<=s))) return true
-   if (((a<=r)&& (c<=s)) || ((c<=r)&&(a<=s))) return true
-   else return false
-    }
+    val minSd1 = minOf(a, b) /* первая меньшая сторона кирпича*/
+    val minSd2 = minOf((a + b - minSd1), c) /* вторая меньшая сторона кирпича */
+    val minSdH = minOf(r, s) /* меньшая сторона отверстия*/
+    return ((minSd1 <= minSdH) && (minSd2 <= (r + s - minSdH)) || ((minSd2 <= minSdH) && (minSd1 <= (r + s - minSdH))))
+}
 

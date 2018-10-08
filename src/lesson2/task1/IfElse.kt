@@ -4,7 +4,9 @@ package lesson2.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
+
 
 /**
  * Пример
@@ -63,15 +65,16 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    when (age % 10) {
-        1 -> if (age % 100 != 11) return ("$age год"); else return ("$age лет")
-        2, 3, 4 -> if (age % 100 != 12 && age % 100 != 13 && age % 100 != 14) return ("$age года"); else return ("$age лет")
-        5, 6, 7, 8, 9, 0 -> return ("$age лет")
-        else -> return ("нет такого возраста")
-    }
+fun ageDescription(age: Int): String =
+        when (age % 100) {
+            in 5..14 -> ("$age лет")
+            in 1..191 step 10 -> ("$age год")
+            in 2..92 step 10 -> ("$age года")
+            in 3..93 step 10 -> ("$age года")
+            in 4..94 step 10 -> ("$age года")
+            else -> ("$age лет")
+        }
 
-}
 
 /**
  * Простая
@@ -86,9 +89,13 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s1 = t1 * v1
     val s2 = t2 * v2
     val s3 = t3 * v3
-    var s= (s1+s2+s3)/2.0
-     if (s>s1)  s = s - s1 else return (s/v1)
-     if (s>s2) return ((s - s2)/v3 + t1 + t2) else return ((s/v2)+t1)
+    var s = (s1 + s2 + s3) / 2.0
+    if (s > s1) {
+        s -= s1
+        return if (s > s2) ((s - s2) / v3 + t1 + t2)
+        else ((s / v2) + t1)
+    }
+    return (s / v1)
 }
 
 /**
@@ -127,15 +134,15 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if (a>b+c || b>a+c || c>a+b) return (-1)
-    if ((a>=b && a>=c) && ((c*c+b*b)>a*a)) return 0
-    if ((b>=a && b>=c) && ((a*a+c*c)>b*b)) return 0
-    if ((c>=a && c>=b) && ((a*a+b*b)>c*c)) return 0
-    if ((a>=b && a>=c) && ((c*c+b*b)<a*a)) return 2
-    if ((b>=a && b>=c) && ((a*a+c*c)<b*b)) return 2
-    if ((c>=a && c>=b) && ((a*a+b*b)<c*c)) return 2
-        else return 1
-
+    val max3 = maxOf(a, b, c) /* максимум из 3 переменных */
+    val min3 = minOf(a, b, c) /* минимум из 3 переменных */
+    val med = a + b + c - max3 - min3 /* среднее из 3 переменных */
+    if ((a < b + c) && (b < a + c) && (c < a + b)) {
+        if (max3 * max3 < (min3 * min3 + med * med)) return 0
+        if (max3 * max3 > (min3 * min3 + med * med)) return 2
+        if (max3 * max3 == (min3 * min3 + med * med)) return 1
+    }
+    return (-1)
 }
 
 /**
@@ -147,12 +154,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if (a<=c && d<=b) return (d-c)
-    if (a==c && d>=b) return (b-a)
-    if (a>c && d==b) return (b-a)
-    if (c<a && a<d && d<b) return (d-a)
-    if (a<c && c<b && b<d) return (b-c)
-    if (c<a && a==d||c==b && b<d) return 0
-    if (c<a && b<d) return (b-a)
-    else return -1
+    val ac = maxOf(a, c) /* точка с наименьшей координатой из a и c */
+    val db = minOf(d, b) /* точка с наименьшей координатой из d и b */
+    return if ((b < c) || (d < a)) -1
+    else (db - ac)
 }
