@@ -146,7 +146,7 @@ fun maxDivisor(n: Int): Int {
 fun isCoPrime(m: Int, n: Int): Boolean {
     if (maxOf(m, n) % minOf(m, n) == 0) return false
     for (i in 2..minOf(m, n) / 2) {
-        if ((n % i == 0) && (m % i == 0)) return false
+        if ((n % i == 0) && (m % i == 0) || m == 1 || n == 1) return false
     }
     return true
 }
@@ -160,7 +160,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    return when (sqrt(maxOf(m, n).toDouble()).toInt() - (minOf(m, n).toDouble()).toInt()) {
+    return when (sqrt(n.toDouble()) - sqrt(m.toDouble())) {
         in 1..maxOf(m, n) -> true
         else -> false
     }

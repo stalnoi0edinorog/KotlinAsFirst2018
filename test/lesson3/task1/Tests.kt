@@ -139,6 +139,8 @@ class Tests {
         assertFalse(isCoPrime(37, 111))
         assertTrue(isCoPrime(1234567890, 908765431))
         assertTrue(isCoPrime(2109876543, 1234567891))
+        assertFalse(isCoPrime(33729, 1))
+
     }
 
     @Test
@@ -153,6 +155,7 @@ class Tests {
         assertTrue(squareBetweenExists(63, 64))
         assertFalse(squareBetweenExists(51, 61))
         assertFalse(squareBetweenExists(999, 1001))
+        assertFalse(squareBetweenExists(1280977335, 1684708868))
         assertTrue(squareBetweenExists(152374337, 152423715))
         assertFalse(squareBetweenExists(2147395601, Int.MAX_VALUE))
     }
