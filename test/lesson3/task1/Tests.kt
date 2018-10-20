@@ -78,6 +78,7 @@ class Tests {
         assertEquals(1, fib(1))
         assertEquals(1, fib(2))
         assertEquals(2, fib(3))
+        assertEquals(3, fib(4))
         assertEquals(5, fib(5))
         assertEquals(21, fib(8))
         assertEquals(102334155, fib(40))
@@ -110,7 +111,7 @@ class Tests {
         assertEquals(97, minDivisor(97))
         assertEquals(7, minDivisor(49))
         assertEquals(17, minDivisor(8653))
-        assertEquals(2124679 , minDivisor(2124679 ))
+        assertEquals(2124679, minDivisor(2124679))
         assertEquals(1073676287, minDivisor(1073676287))
         assertEquals(Int.MAX_VALUE, minDivisor(Int.MAX_VALUE))
     }
@@ -124,7 +125,7 @@ class Tests {
         assertEquals(17, maxDivisor(34))
         assertEquals(7, maxDivisor(49))
         assertEquals(509, maxDivisor(8653))
-        assertEquals(1 , maxDivisor(2124679 ))
+        assertEquals(1, maxDivisor(2124679))
         assertEquals(1, maxDivisor(1073676287))
         assertEquals(1, maxDivisor(Int.MAX_VALUE))
     }
@@ -144,9 +145,12 @@ class Tests {
     @Tag("Easy")
     fun squareBetweenExists() {
         assertTrue(squareBetweenExists(1, 1))
+        assertTrue(squareBetweenExists(1, 2345))
+        assertFalse(squareBetweenExists(1, 0))
         assertTrue(squareBetweenExists(21, 28))
         assertTrue(squareBetweenExists(36, 48))
         assertTrue(squareBetweenExists(50, 64))
+        assertTrue(squareBetweenExists(63, 64))
         assertFalse(squareBetweenExists(51, 61))
         assertFalse(squareBetweenExists(999, 1001))
         assertTrue(squareBetweenExists(152374337, 152423715))
@@ -177,6 +181,7 @@ class Tests {
         assertEquals(0.0, sin(PI, 1e-5), 1e-5)
         assertEquals(-1.0, sin(3.0 * PI / 2.0, 1e-5), 1e-5)
         assertEquals(0.0, sin(100 * PI, 1e-5), 1e-5)
+        assertEquals(0.0, sin(101 * PI, 1e-5), 1e-5)
     }
 
     @Test
@@ -187,6 +192,8 @@ class Tests {
         assertEquals(-1.0, cos(PI, 1e-5), 1e-5)
         assertEquals(0.0, cos(3.0 * PI / 2.0, 1e-5), 1e-5)
         assertEquals(1.0, cos(100 * PI, 1e-5), 1e-5)
+        assertEquals(-1.0, cos(101 * PI, 1e-5), 1e-5)
+
     }
 
     @Test
@@ -195,6 +202,8 @@ class Tests {
         assertEquals(87431, revert(13478))
         assertEquals(0, revert(0))
         assertEquals(3, revert(3))
+        assertEquals(21, revert(12))
+        assertEquals(-764321, revert(-123467))
         assertEquals(111, revert(111))
         assertEquals(17571, revert(17571))
         assertEquals(123456789, revert(987654321))
@@ -204,8 +213,11 @@ class Tests {
     @Tag("Normal")
     fun isPalindrome() {
         assertTrue(isPalindrome(3))
+        assertFalse(isPalindrome(13))
         assertFalse(isPalindrome(3653))
         assertTrue(isPalindrome(15751))
+        assertTrue(isPalindrome(1221))
+        assertFalse(isPalindrome(157847594))
         assertTrue(isPalindrome(24688642))
     }
 
@@ -215,8 +227,14 @@ class Tests {
         assertTrue(hasDifferentDigits(323))
         assertTrue(hasDifferentDigits(54))
         assertTrue(hasDifferentDigits(222266666))
+        assertTrue(hasDifferentDigits(777777776))
+        assertTrue(hasDifferentDigits(677777776))
         assertFalse(hasDifferentDigits(0))
         assertFalse(hasDifferentDigits(777))
+        assertFalse(hasDifferentDigits(22))
+        assertTrue(hasDifferentDigits(12))
+        assertFalse(hasDifferentDigits(6))
+        assertFalse(hasDifferentDigits(-777))
     }
 
     @Test

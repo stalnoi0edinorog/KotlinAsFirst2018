@@ -1,7 +1,11 @@
-@file:Suppress("UNUSED_PARAMETER")
+@file:Suppress("UNUSED_PARAMETER", "UNREACHABLE_CODE")
 
 package lesson3.task1
 
+import lesson1.task1.sqr
+import java.lang.Math.pow
+import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 /**
@@ -67,14 +71,32 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var sum = 1
+    var k = n
+    while (abs(k) > 9) {
+        sum += 1
+        k /= 10
+    }
+    return sum
+}
+
+
 /**
  * Простая
  *
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var fib = 1
+    var fibNext = 1
+    for (i in 3..n) {
+        fibNext += fib
+        fib = fibNext - fib
+    }
+    return fibNext
+}
 
 /**
  * Простая
@@ -82,21 +104,37 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var lcm = maxOf(m, n)
+    while ((lcm % m != 0) || (lcm % n != 0))
+        lcm += maxOf(m, n)
+    return lcm
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    for (m in 2..n / 2)
+        if (n % m == 0) return m
+    return n
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var maxDiv = 1
+    for (m in 2..n / 2) {
+        if (n % m == 0)
+            maxDiv = m
+    }
+    return maxDiv
+}
 
 /**
  * Простая
@@ -105,7 +143,14 @@ fun maxDivisor(n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    if (maxOf(m, n) % minOf(m, n) == 0) return false
+    for (i in 2..minOf(m, n) / 2) {
+        if ((n % i == 0) && (m % i == 0)) return false
+    }
+    return true
+}
+
 
 /**
  * Простая
@@ -114,7 +159,12 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    return when (sqrt(maxOf(m, n).toDouble()).toInt() - (minOf(m, n).toDouble()).toInt()) {
+        in 1..maxOf(m, n) -> true
+        else -> false
+    }
+}
 
 /**
  * Средняя
@@ -132,7 +182,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var steps = 0
+    var xNext = x
+    while (xNext != 1) {
+        steps++
+        if (xNext % 2 == 0) xNext /= 2
+        else xNext = 3 * xNext + 1
+
+    }
+    return steps
+}
+
 
 /**
  * Средняя
@@ -141,7 +202,20 @@ fun collatzSteps(x: Int): Int = TODO()
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    val x0 = x % (2 * PI)
+    var xNext: Double
+    var sinX = x0
+    var factor = pow(x0, 3.0)
+    var b = 2
+    do {
+        xNext = -factor / factorial(b + 1)
+        factor *= x0 * (-x0)
+        sinX += xNext
+        b += 2
+    } while (abs(xNext) > eps)
+    return sinX
+}
 
 /**
  * Средняя
@@ -150,7 +224,20 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    val x0 = x % (2 * PI)
+    var xNext: Double
+    var cosX = 1.0
+    var factor = pow(x0, 2.0)
+    var b = 1
+    do {
+        xNext = -factor / factorial(b + 1)
+        factor *= x0 * (-x0)
+        cosX += xNext
+        b += 2
+    } while (abs(xNext) > eps)
+    return cosX
+}
 
 /**
  * Средняя
@@ -159,7 +246,15 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var dec = n
+    var newN = 0
+    while (abs(dec) > 0) {
+        newN = newN * 10 + dec % 10
+        dec /= 10
+    }
+    return newN
+}
 
 /**
  * Средняя
@@ -170,7 +265,8 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean = n == revert(n)
+
 
 /**
  * Средняя
@@ -180,18 +276,39 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    val last = n % 10 // Последняя цифра числа n
+    var newN = n / 10
+    while (abs(newN) > 0) {
+        if (last != newN % 10) return true
+        newN /= 10
+    }
+    return false
+}
+
 
 /**
  * Сложная
  *
  * Найти n-ю цифру последовательности из квадратов целых чисел:
- * 149162536496481100121144...
+ * 149162536496481100121144169...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+
+
+fun squareSequenceDigit(n: Int): Int {
+    var lastNum = 0 // последние "разряд" числа
+    var incDis = 0 // сумма цифр в построенном числе
+    var nextNum = 1 // следующий "разряд"
+    while (incDis < n) {
+        lastNum = sqr(nextNum)
+        nextNum++
+        incDis += digitNumber(lastNum)
+    }
+    return ((lastNum / pow(10.0, (incDis - n).toDouble()) % 10).toInt())
+}
 
 /**
  * Сложная
