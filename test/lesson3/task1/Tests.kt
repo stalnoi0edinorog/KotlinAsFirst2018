@@ -136,10 +136,11 @@ class Tests {
         assertTrue(isCoPrime(25, 49))
         assertFalse(isCoPrime(6, 8))
         assertTrue(isCoPrime(17, 97))
+        assertTrue(isCoPrime(1, 48478))
         assertFalse(isCoPrime(37, 111))
         assertTrue(isCoPrime(1234567890, 908765431))
         assertTrue(isCoPrime(2109876543, 1234567891))
-        assertFalse(isCoPrime(33729, 1))
+        assertTrue(isCoPrime(33729, 1))
 
     }
 
@@ -148,14 +149,15 @@ class Tests {
     fun squareBetweenExists() {
         assertTrue(squareBetweenExists(1, 1))
         assertTrue(squareBetweenExists(1, 2345))
-        assertFalse(squareBetweenExists(1, 0))
+        assertTrue(squareBetweenExists(0, 1))
+        assertTrue(squareBetweenExists(0, 0))
         assertTrue(squareBetweenExists(21, 28))
         assertTrue(squareBetweenExists(36, 48))
         assertTrue(squareBetweenExists(50, 64))
         assertTrue(squareBetweenExists(63, 64))
         assertFalse(squareBetweenExists(51, 61))
         assertFalse(squareBetweenExists(999, 1001))
-        assertFalse(squareBetweenExists(1280977335, 1684708868))
+        assertTrue(squareBetweenExists(1280977335, 1684708868))
         assertTrue(squareBetweenExists(152374337, 152423715))
         assertFalse(squareBetweenExists(2147395601, Int.MAX_VALUE))
     }
