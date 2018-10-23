@@ -313,6 +313,7 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
+
 fun fibSequenceDigit(n: Int): Int {
     var lastNum = 0 // последние "разряды" числа
     var incDis = 0 // сумма цифр в построенном числе
