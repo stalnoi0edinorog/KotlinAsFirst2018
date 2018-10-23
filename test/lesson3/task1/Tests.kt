@@ -120,6 +120,8 @@ class Tests {
     @Tag("Easy")
     fun maxDivisor() {
         assertEquals(1, maxDivisor(17))
+        assertEquals(9, maxDivisor(18))
+        assertEquals(1, maxDivisor(97))
         assertEquals(12, maxDivisor(24))
         assertEquals(59, maxDivisor(177))
         assertEquals(17, maxDivisor(34))
