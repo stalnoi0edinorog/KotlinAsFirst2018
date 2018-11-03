@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
 import java.lang.Math.pow
 import kotlin.math.sqrt
 
@@ -209,7 +210,7 @@ fun factorize(n: Int): List<Int> {
             newN /= i
             result.add(i)
         }
-    return result.sorted()
+    return result
 }
 
 
@@ -238,7 +239,7 @@ fun convert(n: Int, base: Int): List<Int> {
         result.add(newNumber)
         number /= base
     } while (number >= 1)
-    return result.asReversed()
+    return result.reversed()
 }
 
 /**
@@ -249,16 +250,10 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String {
-    var number = n
-    var result = String()
-    do {
-        val newNumber = number % base
-        result += if (newNumber <= 9) newNumber.toString() else ('a' + (newNumber - 10)).toString()
-        number /= base
-    } while (number > 0)
-    return result.reversed()
-}
+fun convertToString(n: Int, base: Int): String =
+        convert(n, base).joinToString(separator = "")
+        { if (it > 9) "${it.toChar() - 10 + 'a'.toInt()}" else "$it" }
+
 
 /**
  * Средняя
@@ -287,14 +282,12 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Например: str = "13c", base = 14 -> 250
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var result = 0
-    var inc = 1 // в дальнейшем = base в степени
-    str.reversed().forEach {
-        val nextNumber = if (it <= '9') it - '0' else (it - 'a' + 10)
-        result += nextNumber * inc
-        inc *= base
-    }
-    return result
+    val newDigit = 'a'.toInt() - 10
+    val newDigit2 = '1'.toInt() - 1
+    return decimal(str.map {
+        if (it.toInt() - newDigit < 10) it.toInt() - newDigit2
+        else (it.toInt() - newDigit)
+    }, base)
 }
 
 /**
@@ -306,14 +299,14 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val arab = arrayOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    val rom = arrayOf('M', "CM", 'D', "CD", 'C', "XC", 'L', "XL", 'X', "IX", 'V', "IV", 'I', ' ')
+    val pair = mapOf('M' to 1000, "CM" to 900, 'D' to 500, "CD" to 400, 'C' to 100, "XC" to 90,
+            "L" to 50, "XL" to 40, "X" to 10, "IX" to 9, 'V' to 5, "IV" to 4, 'I' to 1)
     val result = mutableListOf<Any>()
     var nextNumber = n
-    for (i in 0 until arab.size) {
-        while (arab[i] <= nextNumber) {
-            result.add(rom[i])
-            nextNumber -= arab[i]
+    for ((rom, arab) in pair) {
+        while (arab <= nextNumber) {
+            result.add(rom)
+            nextNumber -= arab
         }
     }
     return result.joinToString(separator = "")
