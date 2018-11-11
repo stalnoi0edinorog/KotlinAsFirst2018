@@ -94,7 +94,16 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val result = mapA.toMutableMap()
+    for ((key, value) in mapB) {
+        if ((result[key] == value) || (result[key] == null)) result[key] = value
+        else result[key] = "${result[key]}, $value"
+    }
+    return result
+
+}
+
 
 /**
  * Простая
@@ -106,7 +115,14 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val result = mutableMapOf<Int, MutableList<String>>()
+    for ((name, grade) in grades)
+        if (result[grade] == null) result[grade] = mutableListOf(name)
+        else result[grade]!!.add(name)
+    for ((grade) in result) result[grade]!!.sorted()
+    return result
+}
 
 /**
  * Простая
@@ -118,7 +134,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b + a == b
 
 /**
  * Средняя
@@ -130,7 +146,15 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val map = mutableMapOf<String, List<Double>>()
+    val result = mutableMapOf<String, Double>()
+    for ((key, value) in stockPrices)
+        map[key] = map.getOrDefault(key, listOf()) + value
+    for ((key1, value1) in map)
+        result[key1] = value1.sum() / value1.size
+    return result
+}
 
 /**
  * Средняя
@@ -147,7 +171,17 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    val map = stuff.toMutableMap()
+    var result: String? = null
+    var min = Double.MAX_VALUE
+    for ((key, value) in map)
+        if ((value.first == kind) && (value.second < min)) {
+            min = value.second
+            result = key
+        }
+    return result
+}
 
 /**
  * Сложная
@@ -173,7 +207,18 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val result = friends.toMutableMap()
+    var set: Set<String>
+    for ((key, _) in friends) {
+        set = result[key] ?: setOf()
+        for (i in set) {
+            if (result[key] != null) result[key] = (result[i] ?: setOf()) + set - key
+            if (!friends.contains(i)) result[i] = setOf()
+        }
+    }
+    return result
+}
 
 /**
  * Простая
@@ -189,14 +234,17 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+    for ((key, value) in b)
+        if (a[key] == value) a.remove(key)
+}
 
 /**
  * Простая
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a intersect b).sortedDescending().toList()
 
 /**
  * Средняя
@@ -207,7 +255,14 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val result = word.toLowerCase().toMutableList()
+    val list = word.toLowerCase().toMutableList()
+    for (i in 0 until word.length) {
+        if (list[i] in chars) result.remove(list[i])
+    }
+    return result.size == 0
+}
 
 /**
  * Средняя
@@ -221,7 +276,17 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val result = mutableMapOf<String, Int>()
+    for (element in list) {
+        var sum = 0
+        for (el in list)
+            if (element == el)
+                sum++
+        if (sum >= 2) result += (element to sum)
+    }
+    return result
+}
 
 /**
  * Средняя
@@ -232,7 +297,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean =
+        words.any { it.toCharArray().sorted() in (words - it).map { it.toCharArray().sorted() } }
 
 /**
  * Сложная
