@@ -154,7 +154,13 @@ class Tests {
     @Tag("Easy")
     fun containsIn() {
         assertTrue(containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")))
+        assertFalse(containsIn(mapOf("a" to ""), mapOf("a" to "z", "b" to "sweet")))
         assertFalse(containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")))
+        assertFalse(containsIn(mapOf("a" to "z", "am" to "nott"), mapOf("a" to "z", "b" to "sweet")))
+        assertTrue(containsIn(mapOf("b" to "ne", "a" to "z", "k" to "m"), mapOf("a" to "z", "b" to "ne", "k" to "m", "l" to "sweet")))
+        assertFalse(containsIn(mapOf("b" to "ne", "a" to "0", "k" to "m"), mapOf("a" to "z", "b" to "ne", "k" to "m", "l" to "sweet")))
+
+
     }
 
     @Test
@@ -194,6 +200,25 @@ class Tests {
                         "печенье"
                 )
         )
+        assertEquals(
+                "Мария",
+                findCheapestStuff(
+                        mapOf("Мария" to ("печенье" to Double.MAX_VALUE)),
+                        "печенье"
+                )
+        )
+        assertEquals(
+                "\\\\?6`t;ADupy1D1F6[-c!X*/=[5c\$\\tK\\tbO0|2b5Y{/fkK7^oyk=A<A\\n6=U*vZ'/@v(=\\nJgtA#|13Pc=\$3>aoP\\nO\\\\SjJC3x &-VD0\\\"k xI^98k.KJ]x@qKzKiL2!O#(L$<g*$*<]@bQ,EBEy;7!.nvPn\\nb2jdl1dM0Av!gpoT!\\tcuT+ZKdk^}\\n~UWt]yDFu V@7",
+                findCheapestStuff(
+                        mapOf("W" to ("q ?zCM6y?ST1dM q!y.`4UN'E4C@=@%k`lFT+;SR:}>Htk`~\\\"%\$~uMoL('T|%TU\$!]V<D6FH?-Q>5kF\\\"rp/Nj<bi2I GP9}~_(\\\\\\\"XO#=EQdi\\n:~Y#Sk$\\\\gm%z1[P4Izo[~I46V~wJ;P\$!N[:~g 40c&_-S1x" to 0.17145688151946714),
+                                "f" to ("89" to 0.4113725541983201),
+                                "\"\"" to ("6" to 0.7334655249825457),
+                                "\\?6`t;ADupy1D1F6[-c!X*/=[5c$\tK\tbO0|2b5Y{/fkK7^oyk=A<A\n6=U*vZ'/@v(=\nJgtA#|13Pc=$3>aoP\nO\\SjJC3x &-VD0\"k xI^98k.KJ]x@qKzKiL2!O#(L$<g*$*<]@bQ,EBEy;7!.nvPn\nb2jdl1dM0Av!gpoT!\tcuT+ZKdk^}\n~UWt]yDFu V@7"
+                        to ( " \"\"" to 1.7976931348623157e+308)),
+                        "\"\""
+
+                )
+        )
     }
 
     @Test
@@ -226,6 +251,48 @@ class Tests {
                         )
                 )
         )
+        assertEquals(
+                mapOf(
+                        "Marat" to setOf(),
+                        "Sveta" to setOf("Marat"),
+                        "Mikhail" to setOf("Sveta", "Marat")
+                ),
+                propagateHandshakes(
+                        mapOf(
+                                "Sveta" to setOf("Marat"),
+                                "Mikhail" to setOf("Sveta")
+                        )
+                )
+        )
+        assertEquals(
+                mapOf(
+                        "0" to setOf("5f", "135", "154", "15d", "1", "12", "fb", "194"),
+                        "135" to setOf("154", "15d", "5f", "1", "0", "12", "fb", "194"),
+                        "15d" to setOf("12", "135", "194", "fb", "154", "0", "5f", "1"),
+                        "1" to setOf("0", "135", "fb", "5f", "12", "15d", "154", "194"),
+                        "12" to setOf("194", "135", "15d", "fb", "154", "0", "5f", "1"),
+                        "194" to setOf("135", "12", "15d", "154", "5f", "1", "0", "fb"),
+                        "fb" to setOf("0", "135", "15d", "1", "12", "154", "194", "5f"),
+                        "154" to setOf("15d", "12", "135", "194", "fb", "0", "5f", "1"),
+                        "5f" to setOf("135", "154", "15d", "1", "0", "12", "fb", "194")
+
+                ),
+                propagateHandshakes(
+                        mapOf(
+                                "0" to setOf("5f"),
+                                "135" to setOf("154", "15d", "5f", "1", "0", "12", "fb", "194"),
+                                "15d" to setOf("12", "135"),
+                                "1" to setOf("0", "135", "fb", "5f", "12", "15d", "154", "194"),
+                                "12" to setOf("194", "135", "15d", "fb", "154", "0"),
+                                "194" to setOf("135", "12", "15d"),
+                                "fb" to setOf("0", "135", "15d", "1", "12", "154", "194"),
+                                "154" to setOf("15d"),
+                                "5f" to setOf("135")
+
+                        )
+                )
+        )
+
     }
 
     @Test
@@ -258,6 +325,14 @@ class Tests {
                 emptyList<String>(),
                 whoAreInBoth(listOf("Marat", "Mikhail"), listOf("Sveta", "Kirill"))
         )
+        assertEquals(
+                listOf("Marat", "Julia"),
+                whoAreInBoth(listOf("Marat", "Mikhail", "Julia"), listOf("Sveta", "Julia", "Marat", "Kirill"))
+        )
+        assertEquals(
+                listOf("Marat", "Julia"),
+                whoAreInBoth(listOf("Sveta", "Julia", "Marat", "Kirill"), listOf("Marat", "Mikhail", "Julia"))
+        )
     }
 
     @Test
@@ -266,6 +341,9 @@ class Tests {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
+        assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Julia"))
+        assertTrue(canBuildFrom(listOf('l', 'a', 'j', 'm', 'u', 'r', 'i'), "Julia"))
+
     }
 
     @Test
@@ -283,6 +361,10 @@ class Tests {
                 emptyMap<String, Int>(),
                 extractRepeats(listOf("a", "b", "c"))
         )
+        assertEquals(
+                mapOf("a" to 4, "c" to 3),
+                extractRepeats(listOf("c", "a", "c", "b", "a", "a", "c", "l", "a"))
+        )
     }
 
     @Test
@@ -291,6 +373,7 @@ class Tests {
         assertFalse(hasAnagrams(emptyList()))
         assertTrue(hasAnagrams(listOf("рот", "свет", "тор")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))
+        assertTrue(hasAnagrams(listOf("кабан", "свет", "насос", "банка", "сосна")))
     }
 
     @Test
@@ -307,6 +390,10 @@ class Tests {
         assertEquals(
                 Pair(-1, -1),
                 findSumOfTwo(listOf(1, 2, 3), 6)
+        )
+        assertEquals(
+                Pair(0, 4),
+                findSumOfTwo(listOf(12, 7, 8, 2, 6, 2, 3), 18)
         )
     }
 
@@ -325,6 +412,31 @@ class Tests {
                 bagPacking(
                         mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)),
                         450
+                )
+        )
+        assertEquals(
+                setOf("Кубок", "Подтяжки для носков", "Бикини Ариэль"),
+                bagPacking(
+                        mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000),
+                                "Подтяжки для носков" to (150 to 1500), "Бикини Ариэль" to (230 to 2200)),
+                        885
+                )
+        )
+        assertEquals(
+                setOf("Слиток"),
+                bagPacking(
+                        mapOf("Кубок" to (500 to 2000), "Слиток" to (450 to 5000),
+                                "Подтяжки для носков" to (150 to 1500), "Бикини Ариэль" to (230 to 2200)),
+                        500
+                )
+        )
+        assertEquals(
+                setOf("Леопардовый халат", "Автомат по физике", "Подтяжки для носков", "Бикини Ариэль"),
+                bagPacking(
+                        mapOf("Кубок" to (500 to 2000), "Что-то ценное" to (885 to 2300),
+                                "Леопардовый халат" to (125 to 1450), "Автомат по физике" to(50 to 1100), "Слиток" to (1000 to 5000),
+                                "Подтяжки для носков" to (150 to 1500), "Бикини Ариэль" to (230 to 2200)),
+                        885
                 )
         )
     }
