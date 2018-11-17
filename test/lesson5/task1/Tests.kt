@@ -460,6 +460,15 @@ class Tests {
                         1224
                 )
         )
+        assertEquals(
+                setOf("21"),
+                bagPacking(
+                        mapOf("21" to (1 to 301), "Свободное время" to (3 to 3),
+                                "Отдых" to (5 to 1450), "Автомат по физике" to(2 to 1100)),
+                        1
+                )
+        )
+
     }
 
     // TODO: map task tests

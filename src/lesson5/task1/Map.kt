@@ -348,10 +348,11 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     val treas = treasures.keys.size + 1
     val weight = treasures.values.toList().map { it.first }
     val price = treasures.values.toList().map { it.second }
-    val m = Array(treas) { Array(capacity) { 0 } }
+    val backpack = capacity + 1
+    val m = Array(treas) { Array(backpack) { 0 } }
     var w: Int
     var v: Int
-    for (i in 1 until treas) for (j in 0 until capacity) {
+    for (i in 1 until treas) for (j in 0 until backpack) {
         w = weight[i - 1]
         v = price[i - 1]
         if (w > j) m[i][j] = m[i - 1][j]
@@ -365,7 +366,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             result = result.plus(treasures.keys.toList()[i - 1])
         }
     }
-    help(treas - 1, capacity - 1)
+    help(treas - 1, backpack - 1)
     return result
 }
 
