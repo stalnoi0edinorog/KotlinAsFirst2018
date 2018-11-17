@@ -208,13 +208,15 @@ class Tests {
                 )
         )
         assertEquals(
-                "\\\\?6`t;ADupy1D1F6[-c!X*/=[5c\$\\tK\\tbO0|2b5Y{/fkK7^oyk=A<A\\n6=U*vZ'/@v(=\\nJgtA#|13Pc=\$3>aoP\\nO\\\\SjJC3x &-VD0\\\"k xI^98k.KJ]x@qKzKiL2!O#(L$<g*$*<]@bQ,EBEy;7!.nvPn\\nb2jdl1dM0Av!gpoT!\\tcuT+ZKdk^}\\n~UWt]yDFu V@7",
+                "\\?6`t;ADupy1D1F6[-c!X*/=[5c$\tK\tbO0|2b5Y{/fkK7^oyk=A<A\n6=U*vZ'/@v(=\nJgtA#|13Pc=$3>aoP\nO\\SjJC3x &-VD0\"k xI^98k.KJ]x@qKzKiL2!O#(L$<g*$*<]@bQ,EBEy;7!.nvPn\nb2jdl1dM0Av!gpoT!\tcuT+ZKdk^}\n~UWt]yDFu V@7",
                 findCheapestStuff(
-                        mapOf("W" to ("q ?zCM6y?ST1dM q!y.`4UN'E4C@=@%k`lFT+;SR:}>Htk`~\\\"%\$~uMoL('T|%TU\$!]V<D6FH?-Q>5kF\\\"rp/Nj<bi2I GP9}~_(\\\\\\\"XO#=EQdi\\n:~Y#Sk$\\\\gm%z1[P4Izo[~I46V~wJ;P\$!N[:~g 40c&_-S1x" to 0.17145688151946714),
+                        mapOf(
+                                "W" to ("q ?zCM6y?ST1dM q!y.`4UN'E4C@=@%k`lFT+;SR:}>Htk`~\\\"%\$~uMoL('T|%TU\$!]V<D6FH?-Q>5kF\\\"rp/Nj<bi2I GP9}~_(\\\\\\\"XO#=EQdi\\n:~Y#Sk$\\\\gm%z1[P4Izo[~I46V~wJ;P\$!N[:~g 40c&_-S1x" to 0.17145688151946714),
                                 "f" to ("89" to 0.4113725541983201),
                                 "\"\"" to ("6" to 0.7334655249825457),
                                 "\\?6`t;ADupy1D1F6[-c!X*/=[5c$\tK\tbO0|2b5Y{/fkK7^oyk=A<A\n6=U*vZ'/@v(=\nJgtA#|13Pc=$3>aoP\nO\\SjJC3x &-VD0\"k xI^98k.KJ]x@qKzKiL2!O#(L$<g*$*<]@bQ,EBEy;7!.nvPn\nb2jdl1dM0Av!gpoT!\tcuT+ZKdk^}\n~UWt]yDFu V@7"
-                        to ( " \"\"" to 1.7976931348623157e+308)),
+                                        to ("\"\"" to 1.7976931348623157e+308)
+                        ),
                         "\"\""
 
                 )
@@ -395,11 +397,22 @@ class Tests {
                 Pair(0, 4),
                 findSumOfTwo(listOf(12, 7, 8, 2, 6, 2, 3), 18)
         )
+        assertEquals(
+                Pair(0, 1),
+                findSumOfTwo(listOf(2, 2, 3), 4)
+        )
     }
 
     @Test
     @Tag("Impossible")
     fun bagPacking() {
+        assertEquals(
+                emptySet<String>(),
+                bagPacking(
+                        mapOf(),
+                        850
+                )
+        )
         assertEquals(
                 setOf("Кубок"),
                 bagPacking(
@@ -437,6 +450,14 @@ class Tests {
                                 "Леопардовый халат" to (125 to 1450), "Автомат по физике" to(50 to 1100), "Слиток" to (1000 to 5000),
                                 "Подтяжки для носков" to (150 to 1500), "Бикини Ариэль" to (230 to 2200)),
                         885
+                )
+        )
+        assertEquals(
+                emptySet<String>(),
+                bagPacking(
+                        mapOf("Сон" to (1225 to 9999999), "Свободное время" to (1226 to 5300),
+                                "Отдых" to (1250 to 1450), "Автомат по физике" to(5000 to 1100)),
+                        1224
                 )
         )
     }

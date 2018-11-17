@@ -1,7 +1,9 @@
 @file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
 
 package lesson5.task1
+
 import lesson4.task1.mean
+import kotlin.math.max
 
 /**
  * Пример
@@ -121,7 +123,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     for ((name, grade) in grades)
         result.getOrPut(grade, ::mutableListOf).add(name)
     for ((grade) in result)
-        return result.onEach { result[grade]!!.sortDescending() }
+        result.onEach { result[grade]!!.sortDescending() }
     return result
 }
 
@@ -148,7 +150,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b + a 
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
-        stockPrices.groupBy ({ it.first }, {it.second}).mapValues { mean(it.value) }
+        stockPrices.groupBy({ it.first }, { it.second }).mapValues { mean(it.value) }
 
 /**
  * Средняя
@@ -215,7 +217,7 @@ fun helper(friends: Map<String, Set<String>>, set: Set<String>): Set<String> {
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val result = mutableMapOf<String, Set<String>>()
     for ((k, v) in friends) {
-        if (friends[k] != null) result[k] = v + helper(friends, v) - k
+        result[k] = helper(friends, v) - k
         for (i in v)
             if (friends[i] == null) result[i] = setOf()
     }
@@ -258,7 +260,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a intersect 
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toLowerCase().toSet().all { it in chars }
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toLowerCase().toSet().all { it.toLowerCase() in chars }
 
 /**
  * Средняя
@@ -274,14 +276,9 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toLowerCase().
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val result = mutableMapOf<String, Int>()
-    for (element in list) {
-        var sum = 0
-        for (el in list)
-            if (element == el)
-                sum++
-        if (sum >= 2) result += (element to sum)
-    }
-    return result
+    for (element in list)
+        result[element] = result.getOrPut(element) { 0 } + 1
+    return result.filter { it.value >= 2 }
 }
 
 /**
@@ -314,8 +311,14 @@ fun hasAnagrams(words: List<String>): Boolean =
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (i in list)
-        if ((list - i).contains(number - i)) return list.indexOf(i) to list.indexOf(number - i)
+    val result = mutableMapOf<Int, Int>()
+    for (i in 0 until list.size)
+        result[list[i]] = i
+    for (j in list)
+        if (number - j in result.keys && result[j] != list.indexOf(number - j)) {
+            return if (number - j == j) Pair(list.indexOf(j), (result - result[j])[number - j]!!)
+            else Pair(result[j]!!, result[number - j]!!)
+        }
     return -1 to -1
 }
 
@@ -340,5 +343,29 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  */
 
 
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    var result = setOf<String>()
+    val treas = treasures.keys.size + 1
+    val weight = treasures.values.toList().map { it.first }
+    val price = treasures.values.toList().map { it.second }
+    val m = Array(treas) { Array(capacity) { 0 } }
+    var w: Int
+    var v: Int
+    for (i in 1 until treas) for (j in 0 until capacity) {
+        w = weight[i - 1]
+        v = price[i - 1]
+        if (w > j) m[i][j] = m[i - 1][j]
+        else m[i][j] = max(m[i - 1][j], m[i - 1][j - w] + v)
+    }
+    fun help(i: Int, j: Int) {
+        if (m[i][j] == 0) return
+        if (m[i - 1][j] == m[i][j]) help(i - 1, j)
+        else {
+            help(i - 1, j - weight[i - 1])
+            result = result.plus(treasures.keys.toList()[i - 1])
+        }
+    }
+    help(treas - 1, capacity - 1)
+    return result
+}
 
