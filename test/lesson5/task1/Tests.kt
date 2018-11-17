@@ -342,6 +342,7 @@ class Tests {
     fun canBuildFrom() {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
+        assertTrue(canBuildFrom(listOf('쉌', '잛', 'M', '켠', 'O', 'Z', '7', 'A'), "M"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Julia"))
         assertTrue(canBuildFrom(listOf('l', 'a', 'j', 'm', 'u', 'r', 'i'), "Julia"))
@@ -414,9 +415,9 @@ class Tests {
                 )
         )
         assertEquals(
-                setOf("Кубок"),
+                emptySet<String>(),
                 bagPacking(
-                        mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)),
+                        mapOf("Кубок" to (500 to 0), "Слиток" to (1000 to 5000)),
                         850
                 )
         )
@@ -447,7 +448,7 @@ class Tests {
                 setOf("Леопардовый халат", "Автомат по физике", "Подтяжки для носков", "Бикини Ариэль"),
                 bagPacking(
                         mapOf("Кубок" to (500 to 2000), "Что-то ценное" to (885 to 2300),
-                                "Леопардовый халат" to (125 to 1450), "Автомат по физике" to(50 to 1100), "Слиток" to (1000 to 5000),
+                                "Леопардовый халат" to (125 to 1450), "Автомат по физике" to (50 to 1100), "Слиток" to (1000 to 5000),
                                 "Подтяжки для носков" to (150 to 1500), "Бикини Ариэль" to (230 to 2200)),
                         885
                 )
@@ -456,7 +457,7 @@ class Tests {
                 emptySet<String>(),
                 bagPacking(
                         mapOf("Сон" to (1225 to 9999999), "Свободное время" to (1226 to 5300),
-                                "Отдых" to (1250 to 1450), "Автомат по физике" to(5000 to 1100)),
+                                "Отдых" to (1250 to 1450), "Автомат по физике" to (5000 to 1100)),
                         1224
                 )
         )
@@ -464,7 +465,7 @@ class Tests {
                 setOf("21"),
                 bagPacking(
                         mapOf("21" to (1 to 301), "Свободное время" to (3 to 3),
-                                "Отдых" to (5 to 1450), "Автомат по физике" to(2 to 1100)),
+                                "Отдых" to (5 to 1450), "Автомат по физике" to (2 to 1100)),
                         1
                 )
         )
