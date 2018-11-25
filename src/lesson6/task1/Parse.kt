@@ -96,7 +96,7 @@ fun dateDigitToStr(digital: String): String {
     val months = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября",
             "октября", "ноября", "декабря")
     try {
-        if (date.size != 3 || date[0] > daysInMonth(date[0].toInt(), date[2].toInt()).toString() || date[1].toInt() !in 1..12)
+        if (date.size != 3 || date[0] > daysInMonth(date[1].toInt(), date[2].toInt()).toString() || date[1].toInt() !in 1..12)
             return ""
     } catch (e: NumberFormatException) {
         return ""
@@ -203,7 +203,7 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     val result = str.toLowerCase()
-    val repeat = Regex("""([a-z,а-я]+)\s\1""")
+    val repeat = Regex("""(\S+)\s\1""")
     return if (result.contains(repeat))
         result.indexOf(repeat.find(result)!!.value)
     else -1
