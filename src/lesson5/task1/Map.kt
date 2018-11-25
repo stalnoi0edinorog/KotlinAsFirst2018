@@ -123,7 +123,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     for ((name, grade) in grades)
         result.getOrPut(grade, ::mutableListOf).add(name)
     for ((grade) in result)
-        result.onEach { result[grade]!!.sortDescending() }
+        result.map { result[grade]!!.sortDescending() }
     return result
 }
 
@@ -260,7 +260,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a intersect 
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toLowerCase().toSet().all { it in chars.map{it.toLowerCase()} }
+fun canBuildFrom(chars: List<Char>, word: String): Boolean =
+        word.toLowerCase().toSet().all { it in chars.toString().toLowerCase() }
 
 /**
  * Средняя
@@ -277,7 +278,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toLowerCase().
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val result = mutableMapOf<String, Int>()
     for (element in list)
-        result[element] = result.getOrPut(element) { 0 } + 1
+        result[element] = result.getOrDefault(element, 0) + 1
     return result.filter { it.value >= 2 }
 }
 
@@ -309,16 +310,15 @@ fun hasAnagrams(words: List<String>): Boolean =
  * Например:
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
+ *   2,2,3  [4] -> (0,1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val result = mutableMapOf<Int, Int>()
-    for (i in 0 until list.size)
-        result[list[i]] = i
-    for (j in list)
-        if (number - j in result.keys && result[j] != list.indexOf(number - j)) {
-            return if (number - j == j) Pair(list.indexOf(j), (result - result[j])[number - j]!!)
-            else Pair(result[j]!!, result[number - j]!!)
-        }
+    for ((index, j) in list.withIndex()) {
+        val other = result[number - j]
+        if (other != null) return result[number - j]!! to index
+        result[j] = index
+    }
     return -1 to -1
 }
 
@@ -348,22 +348,24 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     val treas = treasures.keys.size + 1
     val weight = treasures.values.toList().map { it.first }
     val price = treasures.values.toList().map { it.second }
+    val treasKeys = treasures.keys.toList()
     val backpack = capacity + 1
     val m = Array(treas) { Array(backpack) { 0 } }
     var w: Int
     var v: Int
-    for (i in 1 until treas) for (j in 0 until backpack) {
-        w = weight[i - 1]
-        v = price[i - 1]
-        if (w > j) m[i][j] = m[i - 1][j]
-        else m[i][j] = max(m[i - 1][j], m[i - 1][j - w] + v)
-    }
+    for (i in 1 until treas)
+        for (j in 0 until backpack) {
+            w = weight[i - 1]
+            v = price[i - 1]
+            if (w > j) m[i][j] = m[i - 1][j]
+            else m[i][j] = max(m[i - 1][j], m[i - 1][j - w] + v)
+        }
     fun help(i: Int, j: Int) {
         if (m[i][j] == 0) return
         if (m[i - 1][j] == m[i][j]) help(i - 1, j)
         else {
             help(i - 1, j - weight[i - 1])
-            result = result.plus(treasures.keys.toList()[i - 1])
+            result += treasKeys[i - 1]
         }
     }
     help(treas - 1, backpack - 1)
