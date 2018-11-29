@@ -3,7 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson3.task1.digitNumber
 import java.lang.Math.pow
 import kotlin.math.sqrt
 
@@ -124,7 +123,12 @@ fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() / list.size
+fun mean(list: List<Double>): Double {
+    var sum = 0.0
+    for(i in 0 until list.size)
+        sum += list[i] / list.size
+    return sum
+}
 
 
 /**

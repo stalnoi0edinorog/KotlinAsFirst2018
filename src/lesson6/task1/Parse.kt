@@ -101,7 +101,11 @@ fun dateDigitToStr(digital: String): String {
     } catch (e: NumberFormatException) {
         return ""
     }
-    return String.format("%1d %1d %d", date[0].toInt(), months[date[1].toInt() - 1], date[2].toInt())
+    return "${date[0].toInt()} ${months[date[1].toInt() - 1]} ${date[2].toInt()}"
+    // почему строчка  return String.format("%1d %1d %d", date[0].toInt(), months[date[1].toInt() - 1], date[2].toInt())
+    // не нравится идее?
+    // выдаёт ошибку: java.util.IllegalFormatConversionException: d != java.lang.String
+
 
 }
 
