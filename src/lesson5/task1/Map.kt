@@ -122,8 +122,8 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val result = mutableMapOf<Int, MutableList<String>>()
     for ((name, grade) in grades)
         result.getOrPut(grade, ::mutableListOf).add(name)
-    for ((grade) in result)
-        result.map { result[grade]!!.sortDescending() }
+    for ((_, names) in result)
+        names.sortDescending()
     return result
 }
 
@@ -260,9 +260,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a intersect 
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean =
-        word.toLowerCase().toSet().all { it in chars.toString().toLowerCase() }
-
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val char = chars.toString().toLowerCase()
+    return word.toLowerCase().toSet().all { it in char }
+}
 /**
  * Средняя
  *
@@ -355,6 +356,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var v: Int
     for (i in 1 until treas)
         for (j in 0 until backpack) {
+            println(j)
             w = weight[i - 1]
             v = price[i - 1]
             if (w > j) m[i][j] = m[i - 1][j]

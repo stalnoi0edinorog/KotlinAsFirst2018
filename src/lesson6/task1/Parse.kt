@@ -77,7 +77,7 @@ fun dateStrToDigit(str: String): String {
             "июня" to 6, "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12)
     if (date.size != 3 || date[1] !in months || date[0] > daysInMonth(months[date[1]]!!.toInt(), date[2].toInt()).toString())
         return ""
-    return "${twoDigitStr(date[0].toInt())}.${twoDigitStr(months[date[1]]!!)}.${date[2].toInt()}"
+    return String.format("%02d.%02d.%d", date[0].toInt(), months[date[1]]!!.toInt(), date[2].toInt())
 
 }
 
@@ -101,7 +101,7 @@ fun dateDigitToStr(digital: String): String {
     } catch (e: NumberFormatException) {
         return ""
     }
-    return "${date[0].toInt()} ${months[date[1].toInt() - 1]} ${date[2].toInt()}"
+    return String.format("%1d %1d %d", date[0].toInt(), months[date[1].toInt() - 1], date[2].toInt())
 
 }
 
@@ -159,16 +159,14 @@ fun bestHighJump(jumps: String): Int {
     val list2 = mutableListOf<String>() // Удачные попытки
     val str: List<String> // Удачные попытки в виде строки
     val result = mutableListOf<Int>()
-    for (i in list) {
-        if (i.value.contains("+")) list2.add(i.value)
-    }
+    for (i in list)
+        if (i.value.contains("+"))
+            list2.add(i.value)
     str = list2.joinToString().split(" ")
-    for (k in str)
-        for (digit in k)
-            if (digit.isDigit())
-                result.add(k.toInt())
-
-
+    for (k in str) {
+        if (k.all { it.isDigit() } && k != "")
+            result.add(k.toInt())
+    }
     return result.max() ?: -1
 }
 
@@ -181,16 +179,15 @@ fun bestHighJump(jumps: String): Int {
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int {
-    return if (Regex("""\d+(\s*[+-]\s\d+)*""").matches(expression))
-        expression.replace(" ", "")
-                .split(Regex("""(?=[-+])"""))
-                .map { it.toInt() }
-                .sum()
-    else
-        throw  IllegalArgumentException()
+fun plusMinus(expression: String): Int =
+        if (Regex("""\d+(\s*[+-]\s\d+)*""").matches(expression))
+            expression.replace(" ", "")
+                    .split(Regex("""(?=[-+])"""))
+                    .map { it.toInt() }
+                    .sum()
+        else
+            throw  IllegalArgumentException()
 
-}
 
 /**
  * Сложная
