@@ -261,7 +261,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a intersect 
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val char = chars.toString().toLowerCase()
+    val char = chars.map { it.toLowerCase() }
     return word.toLowerCase().toSet().all { it in char }
 }
 
