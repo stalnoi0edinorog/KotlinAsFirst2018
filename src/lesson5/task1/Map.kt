@@ -262,9 +262,9 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a intersect 
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val char = chars.toString().toLowerCase()
-    if (word == " " || word == "") return false
     return word.toLowerCase().toSet().all { it in char }
 }
+
 /**
  * Средняя
  *
