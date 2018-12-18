@@ -135,10 +135,10 @@ fun centerFile(inputName: String, outputName: String) {
             if (line.length == maxLine) {
                 newText.write(line)
             } else {
-                do {
+                while (counter < (maxLine - line.length) / 2 - 1) {
                     newText.write(" ")
                     counter++
-                } while (counter < (maxLine - line.length) / 2 - 1)
+                }
                 counter = 0
                 for (word in line.split(" ")) {
                     newText.write(" ")
@@ -390,7 +390,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-   TODO()
+    TODO()
 }
 
 
