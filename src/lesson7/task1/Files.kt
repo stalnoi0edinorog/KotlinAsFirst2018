@@ -130,21 +130,10 @@ fun centerFile(inputName: String, outputName: String) {
     val inputText = File(inputName).readLines().map { it.trim() }
     try {
         val maxLine = inputText.maxBy { it.length }!!.length
-        var counter = 0
         for (line in inputText) {
-            if (line.length == maxLine) {
-                newText.write(line)
-            } else {
-                while (counter < (maxLine - line.length) / 2 - 1) {
-                    newText.write(" ")
-                    counter++
-                }
-                counter = 0
-                for (word in line.split(" ")) {
-                    newText.write(" ")
-                    newText.write(word)
-                }
-            }
+            val numberOfSpace = (maxLine - line.length) / 2
+            newText.write(" ".repeat(numberOfSpace))
+            newText.write(line)
             newText.newLine()
         }
     } catch (e: NullPointerException) {
@@ -294,7 +283,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     newText.append(line[ch])
             }
         }
-        if (line != File(inputName).readLines().last() && dict['\n'] != null){
+        if (line != File(inputName).readLines().last() && dict['\n'] != null) {
             newText.append(dict['\n'])
             if (line.length - line.indexOf('\n') != 1)
                 continue
@@ -390,7 +379,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+   TODO()
 }
 
 
