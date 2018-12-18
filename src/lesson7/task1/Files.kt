@@ -126,27 +126,31 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    val text = File(inputName).readLines().map { it.trim() }
-    val maxLine = text.maxBy { it.length }!!
-    var counter = 0
-    for (line in text) {
-        if (line.length == maxLine.length) {
-            writer.write(line)
-        } else {
-            do {
-                writer.write(" ")
-                counter++
-            } while (counter < (maxLine.length - line.length) / 2 - 1)
-            counter = 0
-            for (word in line.split(" ")) {
-                writer.write(" ")
-                writer.write(word)
+    val newText = File(outputName).bufferedWriter()
+    val inputText = File(inputName).readLines().map { it.trim() }
+    try {
+        val maxLine = inputText.maxBy { it.length }!!.length
+        var counter = 0
+        for (line in inputText) {
+            if (line.length == maxLine) {
+                newText.write(line)
+            } else {
+                do {
+                    newText.write(" ")
+                    counter++
+                } while (counter < (maxLine - line.length) / 2 - 1)
+                counter = 0
+                for (word in line.split(" ")) {
+                    newText.write(" ")
+                    newText.write(word)
+                }
             }
+            newText.newLine()
         }
-        writer.newLine()
+    } catch (e: NullPointerException) {
+        newText.close()
     }
-    writer.close()
+    newText.close()
 }
 
 
@@ -290,7 +294,11 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     newText.append(line[ch])
             }
         }
-        if (line != File(inputName).readLines().last() && dict['\n'] != null) newText.append(dict['\n'])
+        if (line != File(inputName).readLines().last() && dict['\n'] != null){
+            newText.append(dict['\n'])
+            if (line.length - line.indexOf('\n') != 1)
+                continue
+        }
         newText.append("\n")
     }
     writer.write(newText.toString())
@@ -333,10 +341,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
         if (vocabulary[j - 1].toLowerCase().toSet().size == vocabulary[j - 1].toLowerCase().length)
             newVocabulary.add(vocabulary[j - 1])
     }
-    for (i in 1 until newVocabulary.size) {
-        listOfWords.add(newVocabulary[i - 1])
-        if (newVocabulary[i - 1].length != newVocabulary[i].length) break
-    }
+    listOfWords.addAll(newVocabulary.filter { it.length == newVocabulary[0].length })
     writer.write(listOfWords.joinToString(separator = ", "))
     writer.close()
 }
@@ -385,7 +390,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+   TODO()
 }
 
 
@@ -551,4 +556,3 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
 }
-
